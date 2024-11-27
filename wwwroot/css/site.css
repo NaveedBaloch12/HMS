@@ -1,0 +1,42 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    margin: 0;
+}
+
+nav, .container-fluid {
+    position: fixed;
+    width: 200px;
+    height: 97%;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f9fa;
+    border-right: 1px solid #dee2e6;
+}
+
+.container-fluid{
+    padding : 0;
+}
+
+main {
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.nav-link {
+    width: 200px;
+}
+
+.nav-link:hover {
+    background-color: lightgray;
+}
+
+
+.welcome-note{
+    background-color: lightblue;
+}

@@ -1,0 +1,64 @@
+﻿@model HMS.Entites.User
+
+@{
+    ViewData["Title"] = "Settings";
+}
+
+<h1>Settings</h1>
+
+<div>
+    <hr>
+    <div class="d-flex justify-content-between mx-4">
+        <div>
+            <h4>Name</h4>
+            <p>@Model.Name</p>
+        </div>
+        <div>
+            <a asp-action="EditName" asp-controller="Account" class="btn btn-secondary">Edit</a>
+        </div>
+    </div>
+
+    <hr>
+    <div class="d-flex justify-content-between mx-4">
+        <div>
+            <h4>User Name</h4>
+            <p>@Model.UserName</p>
+        </div>
+        <div hidden>
+            <a asp-action="Edit" asp-controller="Account" class="btn btn-secondary">Edit</a>
+        </div>
+    </div>
+
+    <hr>
+    <div class="d-flex justify-content-between mx-4">
+        <div>
+            <h4>Password</h4>
+            <p>••••••</p>
+        </div>
+        <div>
+            <a asp-action="EditPassword" asp-controller="Account" class="btn btn-secondary">Edit</a>
+        </div>
+    </div>
+
+    <hr>
+    <div class="d-flex justify-content-between mx-4">
+        <div>
+            <h4>Contact Number</h4>
+            <p>@Model.ContactNo</p>
+        </div>
+        <div>
+            <a asp-action="EditContact" asp-controller="Account" class="btn btn-secondary">Edit</a>
+        </div>
+    </div>
+
+    <hr>
+    <div class="d-flex justify-content-between mx-4">
+        <div>
+            <h4>Email Address</h4>
+            <p>@Model.Email</p>
+        </div>
+        <div>
+            <a asp-action="EditEmail" asp-controller="Account" class="btn btn-secondary">Edit</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,41 @@
+﻿@model IEnumerable<HMS.Entites.Appointment>
+
+@{
+    ViewData["Title"] = "View";
+}
+
+<h1>Appointments</h1>
+
+<div class="mt-4">
+    <a asp-controller="Appointment" asp-action="Create" class=" btn btn-primary">Create Appointment</a>
+</div>
+
+<hr />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Doctor</th>
+            <th>Date</th>
+            <th>Notes</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var appointment in Model)
+        {
+            <tr>
+                <td>@appointment.Patient?.Name</td>
+                <td>@appointment.Doctor?.Name</td>
+                <td>@appointment.AppointmentDate.ToString("g")</td>
+                <td>@appointment.Notes</td>
+                <td>@appointment.Status</td>
+                <td>
+                    <a asp-action="Delete" asp-controller="Appointment" asp-route-ID="@appointment.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

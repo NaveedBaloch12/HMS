@@ -1,0 +1,57 @@
+﻿@model HMS.Models.LogInViewModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h1>Login</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Login">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mt-4">
+                <label asp-for="UserName" class="control-label"></label>
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-4">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-4">
+                <label asp-for="Role" class="control-label"></label>
+                <select name="Role" asp-for="Role" class="form-select">
+                    <option selected>Open this select menu</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Doctor">Doctor</option>
+                    <option value="Pharmacist">Pharmacist</option>
+                    <option value="Receptionist">Receptionist</option>
+                    <option value="Lab Technician">Lab Technician</option>
+                </select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+
+            <div class="my-3 text-danger">
+                @ViewBag.Message
+            </div>
+
+            <div class="form-group mt-4">
+                <input type="submit" value="LogIn" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-6 text-center mt-4">
+        <h2>Welcome to Hospital Management System</h2>
+        <p>Your health, our priority. Please log in to access your account.</p>
+    </div>
+    
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

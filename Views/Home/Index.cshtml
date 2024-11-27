@@ -1,0 +1,93 @@
+﻿@using System.Security.Claims;
+@model HMS.Models.HomeIndexViewModel
+
+@{
+    ViewData["Title"] = "Dashborad";
+    var Appointment = Model.Appointments;
+}
+
+<div class="welcome-note mb-3 rounded p-lg-2">
+    <h2 class="display-4">Welcome Back, @Model.User.Name </h2>
+</div>
+
+@if (Model.User.Role == "Admin")
+{
+    <div class="am-bd-dashborad">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body bg-info rounded">
+                        <h4 class="card-title">Employees</h4>
+                        <div class="card-text my-4">
+                            <span class=" fw-bold"> Total Employees:  </span> <span>@Globals.CountUsers</span>
+                        </div>
+                        <a asp-action="Index" asp-controller="User" class="btn btn-primary">Go Employees</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body bg-info rounded">
+                        <h4 class="card-title">Patients</h4>
+                        <div class="card-text my-4">
+                            <span class=" fw-bold"> Total Patients:  </span> <span> @Globals.CountPatients </span>
+                        </div>
+                        <a asp-action="Index" asp-controller="Patient" class="btn btn-primary">Go Patients</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@if (Model.User.Role == "Doctor")
+{
+    <div class="Aponmnt-container pb-4">
+        <h3 class="Heading p-3 bg-success bg-gradient rounded ">All Appointments (@Appointment.Count())</h3>
+        @foreach (var appointment in Appointment)
+        {
+            <div class="card px-3 py-1 mt-3">
+                <div class="d-flex flex-row justify-content-between">
+                    <div class="id">
+                        <h5>Patient ID</h5>
+                        <div>@appointment.PatientId</div>
+                    </div>
+                    <div class="name">
+                        <h5>Patient Name</h5>
+                        <div>@appointment.Patient?.Name</div>
+                    </div>
+                    <div class="age">
+                        <h5>Patient Age</h5>
+                        <div>@appointment.Patient?.CalculateAge()</div>
+                    </div>
+                    <div class="DataTime">
+                        <h5>Time of Appointment</h5>
+                        <div>@appointment.AppointmentDate</div>
+                    </div>
+                </div>
+                <hr class="m-2" />
+                <div class="issue">
+                    <h5>Medical Issue</h5>
+                    <div>@appointment.Notes</div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+
+@if (Model.User.Role == "Pharmacist")
+{
+
+}
+
+@if (Model.User.Role == "Receptionist")
+{
+
+}
+
+@if (Model.User.Role == "Lab Technician")
+{
+
+}
