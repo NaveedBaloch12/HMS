@@ -23,6 +23,7 @@ namespace HMS.Controllers
             {
                 return NotFound();
             }
+
             var Patient = _context.Patients.Find(Appointment.PatientId);
             if (Patient == null)
             {
@@ -54,6 +55,8 @@ namespace HMS.Controllers
                 return NotFound("Appointment not found.");
             }
 
+            appointment.Status = "Checked";
+
             // Process the examination
             var examination = new Examination
             {
@@ -65,11 +68,30 @@ namespace HMS.Controllers
             };
 
             _context.Examinations.Add(examination);
+            _context.Appointments.Update(appointment);
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Appointments");
+            return RedirectToAction("Index", "Examine");
         }
 
+
+        public IActionResult ViewPrescription(int id)
+        {
+            var Appointment = _context.Appointments.Find(id);
+            if (Appointment == null) return NotFound();
+
+            var Patient = _context.Patients.Find(Appointment.PatientId);
+            if (Patient == null) return NotFound();
+
+            var Examine = _context.Examinations.Where(x => x.AppointmentId == id).FirstOrDefault();
+
+            var Medicines = _context.Medicines.Where(x => x.ExaminationId == Examine.Id);
+
+            ViewBag.Medicines = Medicines;
+            ViewBag.Patient = Patient;
+
+            return View();
+        }
 
     }
 }

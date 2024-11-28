@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "ViewPrescription";
+    var Patient = ViewBag.Patient;
+    var Medicines = ViewBag.Medicines;
+}
+
+<h4>Prescription for @Patient.Name</h4>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Timing</th>
+            <th scope="col">Days</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var Medicine in Medicines)
+        {
+            <tr>
+                <td scope="row">@Medicine.Name</td>
+                <td scope="row">@Medicine.Timing</td>
+                <td scope="row">@Medicine.Days</td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+

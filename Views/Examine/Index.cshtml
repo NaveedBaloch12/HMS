@@ -28,7 +28,8 @@
     <form asp-action="SaveExamination" method="post">
         <div class="card p-4 mb-4">
             <h4>Examination Details</h4>
-            <input hidden type="text" asp-for="Examination.AppointmentId" />
+            <input type="text" asp-for="Examination.AppointmentId" value="@Model.Appointment.Id" hidden/>
+
 
             <div class="mb-3">
                 <label for="Diagnosis" class="form-label">Diagnosis</label>
