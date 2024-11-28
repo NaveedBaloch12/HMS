@@ -1,0 +1,96 @@
+﻿@model HMS.Models.ExamineIndexViewModel
+
+@{
+    ViewData["Title"] = "Examine Patient";
+}
+
+<div class="container mt-4 pb-4">
+    <h1 class="mb-4">Examine Patient</h1>
+
+    <div class="card p-4 mb-4">
+        <h4>Patient Details</h4>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Name:</strong> @Model.Patient?.Name</p>
+                <p><strong>Age:</strong> @Model.Patient.CalculateAge()</p>
+                <p><strong>Gender:</strong> @Model.Patient.Gender</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Contact:</strong> @Model.Patient.Contact</p>
+                <p><strong>Medical History:</strong> @Model.Patient.MedicalHistory</p>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- ----------- -->
+    <form asp-action="SaveExamination" method="post">
+        <div class="card p-4 mb-4">
+            <h4>Examination Details</h4>
+            <input hidden type="text" asp-for="Examination.AppointmentId" />
+
+            <div class="mb-3">
+                <label for="Diagnosis" class="form-label">Diagnosis</label>
+                <textarea asp-for="Examination.Diagnosis" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="Notes" class="form-label">Additional Notes</label>
+                <textarea asp-for="Examination.Notes" class="form-control" rows="3"></textarea>
+            </div>
+        </div>
+
+        <div class="card p-4 mb-4">
+            <h4>Prescribe Medicines</h4>
+            <div id="medicines-container">
+
+                <!-- Medicines will be dynamically added here -->
+            </div>
+            <button type="button" id="add-medicine" class="btn btn-outline-primary mt-2">
+                Add Medicine
+            </button>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Examination</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let medicineIndex = 0;
+
+        document.getElementById("add-medicine").addEventListener("click", function () {
+            const container = document.getElementById("medicines-container");
+
+            const medicineDiv = document.createElement("div");
+            medicineDiv.className = "medicine-item mb-3";
+            medicineDiv.innerHTML = `
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="form-label">Medicine Name</label>
+                            <input name="Examination.Medicines[${medicineIndex}].Name" class="form-control" placeholder="Enter medicine name" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Timing</label>
+                            <input name="Examination.Medicines[${medicineIndex}].Timing" class="form-control" placeholder="e.g., Morning, Evening" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Number of Days</label>
+                            <input name="Examination.Medicines[${medicineIndex}].Days" type="number" class="form-control" placeholder="Enter days" />
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="button" class="btn btn-danger remove-medicine">Remove</button>
+                        </div>
+                    </div>
+                `;
+
+            container.appendChild(medicineDiv);
+            medicineIndex++;
+
+            // Add event listener to remove button
+            medicineDiv.querySelector(".remove-medicine").addEventListener("click", function () {
+                container.removeChild(medicineDiv);
+            });
+        });
+    });
+</script>

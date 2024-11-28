@@ -13,6 +13,7 @@ namespace HMS.Entites
         public string? Contact { get; set; }
         public string? Address { get; set; }
         public string? MedicalIssue { get; set; }
+        public string? MedicalHistory { get; set; }
 
 
         public int CalculateAge()

@@ -67,9 +67,14 @@
                     </div>
                 </div>
                 <hr class="m-2" />
-                <div class="issue">
-                    <h5>Medical Issue</h5>
-                    <div>@appointment.Notes</div>
+                <div class="issue d-flex justify-content-between">
+                    <div>
+                        <h5>Medical Issue</h5>
+                        <div>@appointment.Notes</div>
+                    </div>
+                    <div>
+                        <a class="btn btn-primary px-5" asp-action="Index" asp-controller="Examine" asp-route-ID="@appointment.Id">Examine</a>
+                    </div>
                 </div>
             </div>
         }
