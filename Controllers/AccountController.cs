@@ -198,11 +198,6 @@ namespace HMS.Controllers
             _context.SaveChanges();
             return RedirectToAction("Settings");
         }
-
-        public IActionResult Checkup()
-        {
-            return View();
-        }
     }
 
 }

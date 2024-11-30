@@ -74,7 +74,10 @@
                     </div>
                     <div>
                         <a class="btn btn-primary px-5" asp-action="Index" asp-controller="Examine" asp-route-ID="@appointment.Id">Examine</a>
-                        <a class="btn btn-secondary px-3" asp-action="ViewPrescription" asp-controller="Examine" asp-route-ID="@appointment.Id">See Prescription</a>
+                        @if(appointment.Status != "Waiting")
+                        {
+                            <a class="btn btn-secondary px-3" asp-action="ViewPrescription" asp-controller="Examine" asp-route-ID="@appointment.Id">See Prescription</a>
+                        }
 
                     </div>
                 </div>

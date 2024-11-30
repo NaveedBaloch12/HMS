@@ -85,6 +85,8 @@ namespace HMS.Controllers
 
             var Examine = _context.Examinations.Where(x => x.AppointmentId == id).FirstOrDefault();
 
+            if(Examine == null) return NotFound("No Medicine is Suggested to Patient..");
+
             var Medicines = _context.Medicines.Where(x => x.ExaminationId == Examine.Id);
 
             ViewBag.Medicines = Medicines;
