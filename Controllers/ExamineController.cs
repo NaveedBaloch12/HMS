@@ -75,6 +75,7 @@ namespace HMS.Controllers
         }
 
 
+        [Authorize]
         public IActionResult ViewPrescription(int id)
         {
             var Appointment = _context.Appointments.Find(id);

@@ -13,6 +13,8 @@
         public string? Notes { get; set; }
 
         public List<Medicine>? Medicines { get; set; }
+
+        public ICollection<DispensedMedicine>? DispensedMedicines { get; set; }
     }
 
 }

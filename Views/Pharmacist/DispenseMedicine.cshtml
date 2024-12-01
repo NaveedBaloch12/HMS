@@ -1,0 +1,67 @@
+﻿@model HMS.Models.DispenseMedicineViewModel
+
+@{
+    ViewData["Title"] = "Dispense Medicines";
+}
+
+<div class="container mt-4">
+    <h1>Dispense Medicines</h1>
+
+    <div class="card p-4 mb-4">
+        <h4>Patient Details</h4>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Name:</strong> @Model.Patient.Name</p>
+                <p><strong>Age:</strong> @Model.Patient.CalculateAge()</p>
+                <p><strong>Gender:</strong> @Model.Patient.Gender</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Contact:</strong> @Model.Patient.Contact</p>
+                <p><strong>Medical History:</strong> @Model.Patient.MedicalHistory</p>
+            </div>
+        </div>
+    </div>
+
+    <form asp-action="Dispense" method="post">
+        <input type="hidden" asp-for="ExaminationId" />
+
+        <div class="card p-4 mb-4">
+            <h4>Prescribed Medicines</h4>
+
+            @if (Model.Medicines != null && Model.Medicines.Any())
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Medicine Name</th>
+                            <th>Days</th>
+                            <th>Available Stock</th>
+                            <th>Dispense</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < Model.Medicines.Count; i++)
+                        {
+                            var medicine = Model.Medicines[i];
+                            <tr>
+                                <td>@(i + 1)</td>
+                                <td>@medicine.Name</td>
+                                <td>@medicine.Days</td>
+                                <td>@Model.Inventory.FirstOrDefault(inv => inv.MedicineName == medicine.Name)?.StockQuantity </td>
+                                <td>
+                                    <input type="checkbox" name="Dispensed[@i]" value="true" />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No medicines prescribed.</p>
+            }
+        </div>
+        <button type="submit" class="btn btn-primary">Confirm Dispensation</button>
+    </form>
+</div>

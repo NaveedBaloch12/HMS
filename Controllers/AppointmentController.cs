@@ -52,11 +52,15 @@ public class AppointmentController : Controller
     public IActionResult Delete(int id)
     {
         var appointment = _context.Appointments.Find(id);
+        if (appointment == null) return NotFound();
 
-        if (appointment == null)
+        var relatedExaminations = _context.Examinations.Where(e => e.AppointmentId == id).ToList();
+        if (relatedExaminations.Any())
         {
-            return NotFound();
+            _context.Examinations.RemoveRange(relatedExaminations);
         }
+
+
 
         _context.Appointments.Remove(appointment);
         _context.SaveChanges();

@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "Patients";
+}
+
+<div class="container mt-4">
+    <h1>Pharmacist - Patients</h1>
+
+    <div class="mb-4">
+        <input id="searchInput" class="form-control" placeholder="Search patients by name or contact..." />
+    </div>
+
+    <table id="patientsTable" class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Contact</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var patient in Model)
+            {
+                <tr>
+                    <td>@patient.Id</td>
+                    <td>@patient.Name</td>
+                    <td>@patient.Gender</td>
+                    <td>@patient.Contact</td>
+                    <td>
+                        <a class="btn btn-primary" asp-action="DispenseMedicine" asp-route-examinationId="@patient.Id">Dispense</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<script>
+    document.getElementById('searchInput').addEventListener('input', function () {
+        const searchTerm = this.value;
+
+        fetch('/Pharmacist/SearchPatients', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ searchTerm })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const tableBody = document.querySelector('#patientsTable tbody');
+            tableBody.innerHTML = '';
+
+            data.forEach((patient, index) => {
+                const row = `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>${patient.name}</td>
+                        <td>${patient.gender}</td>
+                        <td>${patient.contact}</td>
+                        <td>
+                            <a class="btn btn-primary" href="/Pharmacist/DispenseMedicine?examinationId=${patient.id}">Dispense</a>
+                        </td>
+                    </tr>`;
+                tableBody.innerHTML += row;
+            });
+        });
+    });
+</script>
+
+

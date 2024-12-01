@@ -15,6 +15,8 @@ namespace HMS.Entites
         public string? MedicalIssue { get; set; }
         public string? MedicalHistory { get; set; }
 
+        public ICollection<DispensedMedicine>? DispensedMedicines { get; set; }
+
 
         public int CalculateAge()
         {
