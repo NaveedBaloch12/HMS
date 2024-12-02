@@ -46,28 +46,29 @@ namespace HMS.Controllers
                 _context.Users.Add(model);
 
                 // Send email notification for new users only
-                if (isNewUser)
+                var Subject = "Welcome to HMS";
+                var Body = $@"Your account has been created successfully.<br>
+                        <strong>Username:</strong> {model.UserName}<br>
+                        <strong>Password:</strong> {model.Password}<br><br>
+                        <strong>Link:</strong> <a href= '#' >HMS System</a> <br><br>
+                        Please access you account and change Password ASAP. <br><br>";
+                SendEmail(model, Subject, Body);
+                try
                 {
-                    try
-                    {
-                        var subject = "Welcome to HMS";
-                        var body = $@"
-                    Dear {model.Name},<br><br>
-                    Your account has been created successfully.<br>
-                    <strong>Username:</strong> {model.UserName}<br>
-                    <strong>Password:</strong> {model.Password}<br><br>
-                    Please access you account and change Password ASAP. <br><br>
-                    Thank you,<br>
-                    HMS Team";
+                    var subject = "Welcome to HMS";
+                    var body = $@"
+                        Dear {model.Name},<br><br>
+                        c
+                        Thank you,<br>
+                        HMS Team";
 
-                        // Send email using the EmailService
-                        _emailService.SendEmailAsync(model.Email, subject, body).Wait();
-                    }
-                    catch (Exception ex)
-                    {
-                        // Log error (optional)
-                        Console.WriteLine($"Email sending failed: {ex.Message}");
-                    }
+                    // Send email using the EmailService
+                    _emailService.SendEmailAsync(model.Email, subject, body).Wait();
+                }
+                catch (Exception ex)
+                {
+                    // Log error (optional)
+                    Console.WriteLine($"Email sending failed: {ex.Message}");
                 }
             }
             else
@@ -76,30 +77,11 @@ namespace HMS.Controllers
                 _context.Users.Update(model);
 
                 // Send email notification for new users only
-                if (isNewUser)
-                {
-                    try
-                    {
-                        var subject = "Account Updation";
-                        var body = $@"
-                    Dear {model.Name},<br><br>
-                    Your account has been Updated successfully.<br>
-                    <strong>Username:</strong> {model.Email}<br>
-                    <strong>Password:</strong> {model.Password}<br>
-                    <strong>Role:</strong> {model.Role}<br><br>
-                    Please access you account and change Password ASAP. <br><br>
-                    Thank you,<br>
-                    HMS Team";
-
-                        // Send email using the EmailService
-                        _emailService.SendEmailAsync(model.Email, subject, body).Wait();
-                    }
-                    catch (Exception ex)
-                    {
-                        // Log error (optional)
-                        Console.WriteLine($"Email sending failed: {ex.Message}");
-                    }
-                }
+                var Subject = "Account Updation";
+                var Body = $@"Your account has been Upddated successfully.<br>
+                        <strong>Username:</strong> {model.UserName}<br>
+                        <strong>Password:</strong> {model.Password}";
+                SendEmail(model, Subject, Body);
             }
 
             _context.SaveChanges();
@@ -121,26 +103,34 @@ namespace HMS.Controllers
                 _context.Users.Remove(UserInDb);
                 _context.SaveChanges();
 
-                try
-                {
-                    var subject = "Account Deletion";
-                    var body = $@"
-                    Dear {UserInDb.Name},<br><br>
-                    Your account has been Deleted due to some reason. You will not able to access you account<br><br>
-                    Thank you,<br>
-                    HMS Team";
-
-                    // Send email using the EmailService
-                    _emailService.SendEmailAsync(UserInDb.Email, subject, body).Wait();
-                }
-                catch (Exception ex)
-                {
-                    // Log error (optional)
-                    Console.WriteLine($"Email sending failed: {ex.Message}");
-                }
+                SendEmail(UserInDb, "Account Deletion", "Your account has been Deleted due to some reason. You will not able to access you account");
 
             }
             return RedirectToAction("Index");
         }
+
+
+        // Function to  Send Email
+        private void SendEmail(User user, string Prmsubject, string Prmbody)
+        {
+            try
+            {
+                var subject = Prmsubject;
+                var body = $@"
+                    Dear {user.Name},<br><br>
+                    {Prmbody}<br><br>
+                    Thank you,<br>
+                    HMS Team";
+
+                // Send email using the EmailService
+                _emailService.SendEmailAsync(user.Email, subject, body).Wait();
+            }
+            catch (Exception ex)
+            {
+                // Log error (optional)
+                Console.WriteLine($"Email sending failed: {ex.Message}");
+            }
+        }
+
     }
 }
