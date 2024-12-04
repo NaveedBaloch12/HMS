@@ -11,18 +11,40 @@
         <h4>Patient Details</h4>
         <div class="row">
             <div class="col-md-6">
+                <p><strong>Patient ID:</strong> @Model.Patient.Id</p>
                 <p><strong>Name:</strong> @Model.Patient?.Name</p>
                 <p><strong>Age:</strong> @Model.Patient.CalculateAge()</p>
-                <p><strong>Gender:</strong> @Model.Patient.Gender</p>
             </div>
             <div class="col-md-6">
+                <p><strong>Gender:</strong> @Model.Patient.Gender</p>
                 <p><strong>Contact:</strong> @Model.Patient.Contact</p>
                 <p><strong>Medical History:</strong> @Model.Patient.MedicalHistory</p>
             </div>
         </div>
     </div>
 
+    <div class="card my-2 p-4">
+        <form asp-action="SuggestTest" asp-controller="Examine" method="post">
+            <h4>Test Suggestion</h4>
+            <input type="hidden" name="doctorId" value="@Model.Appointment.DoctorId" />
+            <input type="hidden" name="patientId" value="@Model.Patient.Id" />
+            <input type="hidden" name="AppointmentID" value="@Model.Appointment.Id" />
 
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label">Test Name:</label>
+                    <input type="text" id="testName" name="testName" class="form-control" required />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Description</label>
+                    <input name="description" id="description" class="form-control" />
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary ">Suggest Test</button>
+                </div>
+            </div>
+        </form>
+    </div>
 
     <!-- ----------- -->
     <form asp-action="SaveExamination" method="post">
@@ -51,10 +73,10 @@
                 Add Medicine
             </button>
         </div>
-
         <button type="submit" class="btn btn-success">Save Examination</button>
     </form>
 </div>
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {

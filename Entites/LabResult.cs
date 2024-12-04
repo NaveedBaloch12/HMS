@@ -10,7 +10,6 @@
         public DateTime PerformedDate { get; set; }
 
         public Patient? Patient { get; set; }
-        public DoctorSuggestion? DoctorSuggestion { get; set; }
     }
 
 }

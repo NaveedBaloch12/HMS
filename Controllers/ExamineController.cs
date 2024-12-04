@@ -74,8 +74,26 @@ namespace HMS.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpPost]
+        [HttpPost]
+        public IActionResult SuggestTest(int doctorId,int patientId, int AppointmentID, string testName, string description)
+        {
+            var suggestedTest = new SuggestedTest
+            {
+                DoctorId = doctorId,
+                PatientId = patientId,
+                TestName = testName,
+                Description = description,
+                SuggestedDate = DateTime.Now
+            };
 
-        
+            _context.SuggestedTests.Add(suggestedTest);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", new { id = AppointmentID });
+        }
+
+
         public IActionResult ViewPrescription(int id)
         {
             var Appointment = _context.Appointments.Find(id);

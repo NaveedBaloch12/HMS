@@ -66,6 +66,8 @@ namespace HMS.Controllers
         public IActionResult DispenseMedicine(int id)
         {
             Globals.CurrentExaminationId = id;
+            Globals.CartMedicinesList.Clear();
+            Globals.TotalPrice = 0;
 
             var examination = _context.Examinations.Include(e => e.Medicines).FirstOrDefault(e => e.Id == id);
             if (examination == null) return NotFound();

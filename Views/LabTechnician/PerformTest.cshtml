@@ -1,23 +1,28 @@
 ﻿@model HMS.Entites.LabResult
 
 @{
-    ViewData["Title"] = "Perform Task";
+    ViewData["Title"] = "Perform Test";
 }
 
-<h1>Perform Test</h1>
-<form asp-action="PerformTest" method="post">
-    <input asp-for="DoctorSuggestionId" type="hidden" />
-    <input asp-for="PatientId" type="hidden" />
+<div class="card my-2 p-4">
+    <form asp-action="PerformTest" asp-controller="LabTechnician" method="post">
+        <h4>Test Suggestion</h4>
+        <input type="hidden" name="patientId" value="@Model.PatientId" />
+        <input type="hidden" name="DoctorSuggestionId" value="@Model.DoctorSuggestionId" />
 
-    <div class="form-group">
-        <label asp-for="TestName"></label>
-        <input asp-for="TestName" class="form-control" readonly />
-    </div>
 
-    <div class="form-group">
-        <label asp-for="Result"></label>
-        <textarea asp-for="Result" class="form-control"></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-success">Save Result</button>
-</form>
+        <div class="">
+            <div class="">
+                <label class="form-label">Test Name:</label>
+                <input type="text" id="testName" name="testName" class="form-control" value="@Model.TestName" />
+            </div>
+            <div class="">
+                <label class="form-label">Result</label>
+                <input name="Result" id="Result" class="form-control" />
+            </div>
+            <div class="">
+                <button type="submit" class="btn btn-primary ">Suggest Test</button>
+            </div>
+        </div>
+    </form>
+</div>

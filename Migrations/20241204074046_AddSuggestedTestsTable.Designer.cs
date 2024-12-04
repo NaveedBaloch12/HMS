@@ -4,6 +4,7 @@ using HMS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HMS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241204074046_AddSuggestedTestsTable")]
+    partial class AddSuggestedTestsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,6 +91,38 @@ namespace HMS.Migrations
                     b.ToTable("DispensedMedicines");
                 });
 
+            modelBuilder.Entity("HMS.Entites.DoctorSuggestion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SuggestedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TestName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("DoctorSuggestions");
+                });
+
             modelBuilder.Entity("HMS.Entites.Examination", b =>
                 {
                     b.Property<int>("Id")
@@ -141,6 +176,8 @@ namespace HMS.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DoctorSuggestionId");
 
                     b.HasIndex("PatientId");
 
@@ -246,9 +283,6 @@ namespace HMS.Migrations
 
                     b.Property<int>("DoctorId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("bit");
 
                     b.Property<int>("PatientId")
                         .HasColumnType("int");
@@ -356,6 +390,25 @@ namespace HMS.Migrations
                     b.Navigation("PharmacyInventory");
                 });
 
+            modelBuilder.Entity("HMS.Entites.DoctorSuggestion", b =>
+                {
+                    b.HasOne("HMS.Entites.User", "Doctor")
+                        .WithMany()
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HMS.Entites.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
+
+                    b.Navigation("Patient");
+                });
+
             modelBuilder.Entity("HMS.Entites.Examination", b =>
                 {
                     b.HasOne("HMS.Entites.Appointment", "Appointment")
@@ -377,11 +430,19 @@ namespace HMS.Migrations
 
             modelBuilder.Entity("HMS.Entites.LabResult", b =>
                 {
+                    b.HasOne("HMS.Entites.DoctorSuggestion", "DoctorSuggestion")
+                        .WithMany()
+                        .HasForeignKey("DoctorSuggestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("HMS.Entites.Patient", "Patient")
                         .WithMany()
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("DoctorSuggestion");
 
                     b.Navigation("Patient");
                 });
