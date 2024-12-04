@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HMS.Controllers
 {
+    [Authorize]
     public class UserController : Controller
     {
         private readonly AppDbContext _context;
@@ -17,14 +18,14 @@ namespace HMS.Controllers
             _emailService = emailService;
         }
 
-        [Authorize]
+         
         public IActionResult Index()
         {
             var AllUsers = _context.Users.ToList();
             return View(AllUsers);
         }
 
-        [Authorize]
+         
         public IActionResult AddNew(int? id)
         {
             if (id != null)
@@ -35,7 +36,7 @@ namespace HMS.Controllers
             return View();
         }
 
-        [Authorize]
+         
         public IActionResult AddNewForm(User model)
         {
             bool isNewUser = model.Id == 0;
@@ -89,7 +90,7 @@ namespace HMS.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize]
+         
         public IActionResult Delete(int ID)
         {
             var UserInDb = _context.Users.SingleOrDefault(x => x.Id == ID);

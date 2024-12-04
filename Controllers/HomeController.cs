@@ -50,6 +50,30 @@ namespace HMS.Controllers
             return View(viewModel);
         }
 
+        [Authorize]
+        public IActionResult Checked()
+        {
+            int userId = GetLoggedInUserId();
+            var user = _context.Users.Find(userId);
+            if (user == null) return NotFound();
+
+            var viewModel = new HomeIndexViewModel();
+            viewModel.User = user;
+
+            if (user.Role == "Doctor")
+            {
+                viewModel.Appointments = _context.Appointments
+                                                 .Include(a => a.Patient)
+                                                 .Where(a => a.DoctorId == user.Id && a.Status != "Waiting")
+                                                 .ToList();
+            }
+
+            Globals.CountUsers = _context.Users.Count();
+            Globals.CountPatients = _context.Patients.Count();
+
+            return View(viewModel);
+        }
+
         public IActionResult Privacy()
         {
             return View();

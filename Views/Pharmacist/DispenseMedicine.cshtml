@@ -4,7 +4,7 @@
     ViewData["Title"] = "Dispense Medicines";
 }
 
-<div class="container mt-4">
+<div class="container mt-4 pb-4">
     <h1>Dispense Medicines</h1>
 
     <div class="card p-4 mb-4">
@@ -18,50 +18,91 @@
             <div class="col-md-6">
                 <p><strong>Contact:</strong> @Model.Patient.Contact</p>
                 <p><strong>Medical History:</strong> @Model.Patient.MedicalHistory</p>
+                <p><strong>Medical Issue:</strong> @Model.Patient.MedicalIssue</p>
+
             </div>
         </div>
     </div>
 
-    <form asp-action="Dispense" method="post">
-        <input type="hidden" asp-for="ExaminationId" />
-
-        <div class="card p-4 mb-4">
-            <h4>Prescribed Medicines</h4>
-
-            @if (Model.Medicines != null && Model.Medicines.Any())
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Medicine Name</th>
+                <th>Timing</th>
+                <th>Days</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Medicines.Count; i++)
             {
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Medicine Name</th>
-                            <th>Days</th>
-                            <th>Available Stock</th>
-                            <th>Dispense</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @for (int i = 0; i < Model.Medicines.Count; i++)
-                        {
-                            var medicine = Model.Medicines[i];
-                            <tr>
-                                <td>@(i + 1)</td>
-                                <td>@medicine.Name</td>
-                                <td>@medicine.Days</td>
-                                <td>@Model.Inventory.FirstOrDefault(inv => inv.MedicineName == medicine.Name)?.StockQuantity </td>
-                                <td>
-                                    <input type="checkbox" name="Dispensed[@i]" value="true" />
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
+                var medicine = Model.Medicines[i];
+                <tr>
+                    <td>@(i + 1)</td>
+                    <td>@medicine.Name</td>
+                    <td>@medicine.Timing</td>
+                    <td>@medicine.Days</td>
+                </tr>
             }
-            else
-            {
-                <p>No medicines prescribed.</p>
-            }
+        </tbody>
+    </table>
+
+    <hr />
+
+    <div class="container">
+        <div class="row">
+            <div class="card p-2 col-4 me-2">
+                <form id="AddMedicineForm" action="/" method="post">
+                    <div class="form-group m-2">
+                        <label for="Name">Medicine Name:</label>
+                        <input type="text" class="form-control" id="Name" name="name" />
+                    </div>
+
+                    <div class="form-group m-2">
+                        <label for="Quantity">Medicine Quantity:</label>
+                        <input type="number" class="form-control" id="Quantity" name="quantity" />
+                    </div>
+
+                    <div class="form-group m-2">
+                        <label for="Price">Medicine Price:</label>
+                        <input type="number" class="form-control" id="Price" name="price" step="0.01" />
+                    </div>
+
+                    <button type="button" class="btn btn-primary" id="addMedicineBtn">ADD MEDICINE</button>
+
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                    <script>
+                        $(document).ready(function () {
+                            $('#addMedicineBtn').click(function () {
+                                const name = $('#Name').val();
+                                const quantity = $('#Quantity').val();
+                                const price = $('#Price').val();
+
+                                $.ajax({
+                                    url: '@Url.Action("AddMedicine", "Pharmacist")',
+                                    type: 'POST',
+                                    data: { name, quantity, price },
+                                    success: function (data) {
+                                        $('#ListOfMedicine').html(data);
+                                        // Clear form fields after adding medicine
+                                        $('#Name').val('');
+                                        $('#Quantity').val('');
+                                        $('#Price').val('');
+                                    },
+                                    error: function () {
+                                        alert('Error adding medicine. Please try again.');
+                                    }
+                                });
+                            });
+                        });
+                    </script>
+                </form>
+            </div>
+            <div id="ListOfMedicine" class="col card p-2">
+                @await Html.PartialAsync("_MedicineListPartial", Globals.CartMedicinesList)
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Confirm Dispensation</button>
-    </form>
+    </div>
+</div>
+    </div>
 </div>

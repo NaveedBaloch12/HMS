@@ -1,4 +1,5 @@
-﻿using HMS.Data;
+﻿using HMS.Classes;
+using HMS.Data;
 using HMS.Entites;
 using HMS.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +9,7 @@ using System.Linq;
 
 namespace HMS.Controllers
 {
+    [Authorize]
     public class PharmacistController : Controller
     {
         private readonly AppDbContext _context;
@@ -17,7 +19,7 @@ namespace HMS.Controllers
             _context = context;
         }
 
-        [Authorize]
+
         public IActionResult Index()
         {
             var patients = _context.Patients
@@ -54,7 +56,6 @@ namespace HMS.Controllers
 
 
         // Action to display available medicines
-        [Authorize]
         public IActionResult Inventory()
         {
             var medicines = _context.PharmacyInventories.ToList();
@@ -62,52 +63,61 @@ namespace HMS.Controllers
         }
 
         // Action to display form for dispensing medicines
-        [Authorize]
-        public IActionResult DispenseMedicine(int examinationId)
+        public IActionResult DispenseMedicine(int id)
         {
-            var examination = _context.Examinations.Include(e => e.Medicines).FirstOrDefault(e => e.Id == examinationId);
+            Globals.CurrentExaminationId = id;
+
+            var examination = _context.Examinations.Include(e => e.Medicines).FirstOrDefault(e => e.Id == id);
             if (examination == null) return NotFound();
 
             var patient = _context.Patients.FirstOrDefault(p => p.Id == examination.PatientId);
             if (patient == null) return NotFound();
 
-            var inventory = _context.PharmacyInventories.ToList();
-
             var model = new DispenseMedicineViewModel
             {
                 Patient = patient,
-                ExaminationId = examinationId,
+                ExaminationId = id,
                 Medicines = examination.Medicines.ToList(),
-                Inventory = inventory
             };
 
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Dispense(DispenseMedicineViewModel model, bool[] dispensed)
+        public IActionResult AddMedicine(string name, int quantity, decimal price)
         {
-            if (dispensed != null && model.Medicines != null)
+            if (string.IsNullOrWhiteSpace(name) || quantity <= 0 || price <= 0)
             {
-                for (int i = 0; i < model.Medicines.Count; i++)
-                {
-                    if (dispensed[i])
-                    {
-                        var medicine = model.Medicines[i];
-                        var inventoryItem = _context.PharmacyInventories.FirstOrDefault(inv => inv.MedicineName == medicine.Name);
-                        if (inventoryItem != null && inventoryItem.StockQuantity > 0)
-                        {
-                            inventoryItem.StockQuantity--;
-                        }
-                    }
-                }
-                _context.SaveChanges();
+                return BadRequest("Invalid input.");
             }
 
-            return RedirectToAction("Index", "Pharmacy");
+            Globals.CartMedicinesList.Add(new CartMedicine
+            {
+                ID = Globals.CartMedicinesList.Count + 1,
+                Name = name,
+                Quantity = quantity,
+                Price = price
+            });
+
+            Globals.TotalPrice = Globals.CartMedicinesList.Sum(m => m.Price * m.Quantity);
+
+            return PartialView("_MedicineListPartial", Globals.CartMedicinesList);
         }
 
-        [Authorize]
+        [HttpPost]
+        public IActionResult DeleteMedicine(int id)
+        {
+            var medicine = Globals.CartMedicinesList.FirstOrDefault(m => m.ID == id);
+            if (medicine != null)
+            {
+                Globals.CartMedicinesList.Remove(medicine);
+                Globals.TotalPrice = Globals.CartMedicinesList.Sum(m => m.Price * m.Quantity);
+                return RedirectToAction("DispenseMedicine", new { id = Globals.CurrentExaminationId});
+            }
+            return NotFound("Medicine not found.");
+        }
+
+
         public IActionResult AddNew(int? id)
         {
             if (id != null)
@@ -119,7 +129,7 @@ namespace HMS.Controllers
         }
 
 
-        [Authorize]
+
         public IActionResult AddNewForm(PharmacyInventory model)
         {
             if (model.Id == 0)
@@ -135,7 +145,7 @@ namespace HMS.Controllers
             return RedirectToAction("Inventory");
         }
 
-        [Authorize]
+
         public IActionResult Delete(int ID)
         {
             var MedicineinDb = _context.PharmacyInventories.SingleOrDefault(x => x.Id == ID);

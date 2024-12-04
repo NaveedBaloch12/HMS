@@ -40,6 +40,9 @@
 
                     @if (UserRole == "Doctor")
                     {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark btn" asp-area="" asp-controller="Home" asp-action="Checked">Checked Patients</a>
+                        </li>
                     }
 
                     @if (UserRole == "Pharmacist")
@@ -52,6 +55,13 @@
                         </li>
                     }
                     
+                    @if (UserRole == "Lab Technician")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark btn" asp-controller="LabTechnician" asp-action="Index">Test Requests</a>
+                        </li>
+                    }
+
 
                     @if (UserRole == "Receptionist")
                     {

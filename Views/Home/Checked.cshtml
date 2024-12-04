@@ -1,0 +1,49 @@
+﻿@model HMS.Models.HomeIndexViewModel
+
+@{
+    ViewData["Title"] = "Checked Patints";
+    var Appointment = Model.Appointments;
+}
+
+
+
+<div class="Aponmnt-container pb-4">
+    <h3 class="Heading p-3 bg-success bg-gradient rounded ">Checked Patients(@Appointment.Count())</h3>
+    @foreach (var appointment in Appointment)
+    {
+        <div class="card px-3 py-1 mt-3">
+            <div class="d-flex flex-row justify-content-between">
+                <div class="id">
+                    <h5>Patient ID</h5>
+                    <div>@appointment.PatientId</div>
+                </div>
+                <div class="name">
+                    <h5>Patient Name</h5>
+                    <div>@appointment.Patient?.Name</div>
+                </div>
+                <div class="age">
+                    <h5>Patient Age</h5>
+                    <div>@appointment.Patient?.CalculateAge()</div>
+                </div>
+                <div class="DataTime">
+                    <h5>Time of Appointment</h5>
+                    <div>@appointment.AppointmentDate</div>
+                </div>
+            </div>
+            <hr class="m-2" />
+            <div class="issue d-flex justify-content-between">
+                <div>
+                    <h5>Medical Issue</h5>
+                    <div>@appointment.Notes</div>
+                </div>
+                <div>
+                    @if (appointment.Status != "Waiting")
+                    {
+                        <a class="btn btn-secondary px-3" asp-action="ViewPrescription" asp-controller="Examine" asp-route-ID="@appointment.Id">See Prescription</a>
+                    }
+
+                </div>
+            </div>
+        </div>
+    }
+</div>

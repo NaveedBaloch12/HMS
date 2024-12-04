@@ -1,0 +1,52 @@
+﻿@model List<HMS.Classes.CartMedicine>
+
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Price per Item</th>
+            <th scope="col">Price</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var medicine in Model)
+            {
+                <tr>
+                    <td>@medicine.ID</td>
+                    <td>@medicine.Name</td>
+                    <td>@medicine.Quantity</td>
+                    <td>@medicine.Price</td>
+                    <td>@(medicine.Price * medicine.Quantity)</td>
+                    <td>
+                        <form asp-action="DeleteMedicine" asp-controller="Pharmacist" asp-route-id="@medicine.ID" method="post">
+                            <button type="submit" class="btn btn-danger btn-sm delete-medicine">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-center">No medicines added yet.</td>
+            </tr>
+        }
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <th>Total Bill:</th>
+            <td>@Globals.TotalPrice/-</td>
+
+        </tr>
+    </tbody>
+</table>
+
+<a class="btn btn-primary mx-2" asp-action="" asp-controller="">DISPENCE</a>

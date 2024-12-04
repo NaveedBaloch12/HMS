@@ -45,6 +45,8 @@ namespace HMS.Data
         public DbSet<Examination> Examinations { get; set; }
         public DbSet<PharmacyInventory> PharmacyInventories { get; set; }
         public DbSet<DispensedMedicine> DispensedMedicines { get; set; }
+        public DbSet<DoctorSuggestion> DoctorSuggestions { get; set; }
+        public DbSet<LabResult> LabResults { get; set; }
 
 
     }

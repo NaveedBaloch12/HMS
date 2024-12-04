@@ -1,0 +1,23 @@
+﻿@model HMS.Entites.LabResult
+
+@{
+    ViewData["Title"] = "Perform Task";
+}
+
+<h1>Perform Test</h1>
+<form asp-action="PerformTest" method="post">
+    <input asp-for="DoctorSuggestionId" type="hidden" />
+    <input asp-for="PatientId" type="hidden" />
+
+    <div class="form-group">
+        <label asp-for="TestName"></label>
+        <input asp-for="TestName" class="form-control" readonly />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Result"></label>
+        <textarea asp-for="Result" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save Result</button>
+</form>

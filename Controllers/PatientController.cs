@@ -6,6 +6,7 @@ using System.Security.Claims;
 
 namespace HMS.Controllers
 {
+    [Authorize]
     public class PatientController : Controller
     {
         private readonly AppDbContext _context;
@@ -20,7 +21,7 @@ namespace HMS.Controllers
             return Convert.ToInt32(claimIdentity?.FindFirst(ClaimTypes.Sid)?.Value);
         }
 
-        [Authorize]
+         
         public IActionResult Index()
         {
             int userId = GetLoggedInUserId();
@@ -32,7 +33,7 @@ namespace HMS.Controllers
             return View(AllPateint);
         }
 
-        [Authorize]
+         
         public IActionResult AddNew(int? id)
         {
             if (id != null)
@@ -44,7 +45,7 @@ namespace HMS.Controllers
         }
 
 
-        [Authorize]
+         
         public IActionResult AddNewForm(Patient model)
         {
             if (model.Id == 0)
@@ -60,7 +61,7 @@ namespace HMS.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize]
+         
         public IActionResult Delete(int ID)
         {
             var PatientInDb = _context.Patients.SingleOrDefault(x => x.Id == ID);
@@ -73,7 +74,7 @@ namespace HMS.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize]
+         
         public IActionResult CheckOut(int ID)
         {
             return View();

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HMS.Controllers
 {
+    [Authorize]
     public class ExamineController : Controller
     {
         private readonly AppDbContext _context;
@@ -14,8 +15,7 @@ namespace HMS.Controllers
         {
             _context = Context;
         }
-
-        [Authorize]
+        
         public IActionResult Index(int Id)
         {
             var Appointment = _context.Appointments.Find(Id);
@@ -39,7 +39,7 @@ namespace HMS.Controllers
             return View(ViewModel);
         }
 
-        [Authorize]
+        
         [HttpPost]
         public IActionResult SaveExamination(ExamineIndexViewModel model)
         {
@@ -71,11 +71,11 @@ namespace HMS.Controllers
             _context.Appointments.Update(appointment);
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Examine");
+            return RedirectToAction("Index", "Home");
         }
 
 
-        [Authorize]
+        
         public IActionResult ViewPrescription(int id)
         {
             var Appointment = _context.Appointments.Find(id);

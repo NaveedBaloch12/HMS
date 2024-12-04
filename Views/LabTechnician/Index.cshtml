@@ -1,0 +1,33 @@
+﻿@model IEnumerable<HMS.Entites.DoctorSuggestion>
+
+@{
+    ViewData["Title"] = "Test Requests";
+}
+
+
+<h1>Pending Test Requests</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Test</th>
+            <th>Suggested By</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var request in Model)
+        {
+            <tr>
+                <td>@request.Patient.Name</td>
+                <td>@request.TestName</td>
+                <td>@request.Doctor.Name</td>
+                <td>
+                    <a asp-action="PerformTest" asp-route-id="@request.Id" class="btn btn-primary">Perform Test</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
