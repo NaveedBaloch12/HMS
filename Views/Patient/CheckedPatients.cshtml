@@ -61,6 +61,7 @@
                     @Html.DisplayFor(modelItem => item.MedicalIssue)
                 </td>
                 <td>
+                    <a asp-action="GenerateBill" asp-controller="Billing" asp-route-patientId="@item.Id">Re-Generate Bill</a>
                     <a asp-action="Details" asp-controller="Patient" asp-route-Id="@item.Id">More Details</a>
                 </td>
             </tr>
