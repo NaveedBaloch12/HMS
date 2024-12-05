@@ -1,0 +1,40 @@
+﻿@model HMS.Models.BillingViewModel
+
+@{
+    ViewData["Title"] = "Billing Section";
+}
+
+<div class="container mt-4">
+    <h1>Generate Bill for @Model.PatientName</h1>
+
+    <form asp-action="SaveBill" method="post">
+        <input type="hidden" asp-for="PatientId"/>
+
+        <div class="form-group">
+            <label for="DoctorFee">Patient Name</label>
+            <input asp-for="PatientName" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label for="DoctorFee">Doctor Fee</label>
+            <input asp-for="DoctorFee" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label for="MedicineCost">Medicine Cost</label>
+            <input asp-for="MedicineCost" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label for="TestCost">Test Cost</label>
+            <input asp-for="TestCost" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label for="TotalAmount">Total Amount</label>
+            <input asp-for="TotalAmount" class="form-control" readonly />
+        </div>
+
+        <button type="submit" class="btn btn-success mt-3">Generate Slip</button>
+    </form>
+</div>

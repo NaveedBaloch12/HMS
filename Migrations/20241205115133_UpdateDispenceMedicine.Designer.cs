@@ -4,6 +4,7 @@ using HMS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HMS.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241205115133_UpdateDispenceMedicine")]
+    partial class UpdateDispenceMedicine
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,26 +107,25 @@ namespace HMS.Migrations
                     b.Property<int>("ExaminationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PatientId")
+                    b.Property<int>("MedicineId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PharmacyInventoryId")
+                    b.Property<int>("PatientId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalPrice")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ExaminationId");
 
-                    b.HasIndex("PatientId");
+                    b.HasIndex("MedicineId");
 
-                    b.HasIndex("PharmacyInventoryId");
+                    b.HasIndex("PatientId");
 
                     b.ToTable("DispensedMedicines");
                 });
@@ -233,9 +235,6 @@ namespace HMS.Migrations
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("ClearedBills")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Contact")
                         .HasColumnType("nvarchar(max)");
@@ -400,15 +399,17 @@ namespace HMS.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("HMS.Entites.PharmacyInventory", "PharmacyInventory")
+                        .WithMany("DispensedMedicines")
+                        .HasForeignKey("MedicineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("HMS.Entites.Patient", "Patient")
                         .WithMany("DispensedMedicines")
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("HMS.Entites.PharmacyInventory", "PharmacyInventory")
-                        .WithMany("DispensedMedicines")
-                        .HasForeignKey("PharmacyInventoryId");
 
                     b.Navigation("Examination");
 

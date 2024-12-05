@@ -63,23 +63,26 @@ namespace HMS.Controllers
         }
 
         // Action to display form for dispensing medicines
+        [HttpGet]
         public IActionResult DispenseMedicine(int id)
         {
-            Globals.CurrentExaminationId = id;
+            Globals.CurrentPatientId = id;
             Globals.CartMedicinesList.Clear();
             Globals.TotalPrice = 0;
 
-            var examination = _context.Examinations.Include(e => e.Medicines).FirstOrDefault(e => e.Id == id);
-            if (examination == null) return NotFound();
+            var examination = _context.Examinations.Include(e => e.Medicines).FirstOrDefault(e => e.PatientId == id);
+            var medicines = _context.Medicines.Where(x => x.PatientId == id).ToList();
+            if (examination == null) return NotFound("Examination Not Found");
+            Globals.CurrentExaminationId = examination.Id;
 
-            var patient = _context.Patients.FirstOrDefault(p => p.Id == examination.PatientId);
-            if (patient == null) return NotFound();
+            var patient = _context.Patients.Find(id);
+            if (patient == null) return NotFound("Patient Not Found");
 
             var model = new DispenseMedicineViewModel
             {
                 Patient = patient,
-                ExaminationId = id,
-                Medicines = examination.Medicines.ToList(),
+                ExaminationId = examination.Id,
+                Medicines = medicines,
             };
 
             return View(model);
@@ -96,6 +99,8 @@ namespace HMS.Controllers
             Globals.CartMedicinesList.Add(new CartMedicine
             {
                 ID = Globals.CartMedicinesList.Count + 1,
+                PatientId = Globals.CurrentPatientId,
+                ExaminationId = Globals.CurrentExaminationId,
                 Name = name,
                 Quantity = quantity,
                 Price = price
@@ -106,6 +111,29 @@ namespace HMS.Controllers
             return PartialView("_MedicineListPartial", Globals.CartMedicinesList);
         }
 
+        public IActionResult Dispence()
+        {
+            foreach (var Medicine in Globals.CartMedicinesList)
+            {
+                DispensedMedicine dispensedMedicine = new DispensedMedicine
+                {
+                    PatientId = Medicine.PatientId,
+                    ExaminationId = Medicine.ExaminationId,
+                    Quantity = Medicine.Quantity,
+                    Cost = Medicine.Price,
+                    DispensedDate = DateTime.Now,
+                };
+                var medicine = _context.Medicines.Where(m => m.Name ==  Medicine.Name).FirstOrDefault();
+                medicine.Dispenced = true;
+
+                _context.Medicines.Update(medicine);
+                _context.DispensedMedicines.Add(dispensedMedicine);
+            }
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
         [HttpPost]
         public IActionResult DeleteMedicine(int id)
         {
@@ -114,11 +142,10 @@ namespace HMS.Controllers
             {
                 Globals.CartMedicinesList.Remove(medicine);
                 Globals.TotalPrice = Globals.CartMedicinesList.Sum(m => m.Price * m.Quantity);
-                return RedirectToAction("DispenseMedicine", new { id = Globals.CurrentExaminationId});
+                return RedirectToAction("DispenseMedicine", new { id = Globals.CurrentExaminationId });
             }
             return NotFound("Medicine not found.");
         }
-
 
         public IActionResult AddNew(int? id)
         {

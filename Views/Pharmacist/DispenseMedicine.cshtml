@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Dispense Medicines";
+    Globals.CurrentPatientId = Model.Patient.Id;
+    Globals.CurrentExaminationId = Model.ExaminationId;
 }
 
 <div class="container mt-4 pb-4">
@@ -31,6 +33,7 @@
                 <th>Medicine Name</th>
                 <th>Timing</th>
                 <th>Days</th>
+                <th>Dispenced?</th>
             </tr>
         </thead>
         <tbody>
@@ -42,6 +45,7 @@
                     <td>@medicine.Name</td>
                     <td>@medicine.Timing</td>
                     <td>@medicine.Days</td>
+                    <td>@medicine.Dispenced</td>
                 </tr>
             }
         </tbody>

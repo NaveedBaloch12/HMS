@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = "Pateint Details";
+
+    var Patient = ViewBag.Patient;
+    var Appoitments = ViewBag.Appoitments;
+    var DispencedMedicines = ViewBag.DispencedMedicines;
+    var TestsResults = ViewBag.TestsResults;
+    var Bills = ViewBag.Bills;
+}
+
+<h1 class="my-2 text-center">More Details</h1>
+
+<div class="card p-4 mb-4">
+    <h4>Patient Details</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>Patient ID:</strong> @Patient.Id</p>
+            <p><strong>Name:</strong> @Patient.Name</p>
+            <p><strong>Age:</strong> @Patient.CalculateAge()</p>
+        </div>
+        <div class="col-md-6">
+            <p><strong>Gender:</strong> @Patient.Gender</p>
+            <p><strong>Contact:</strong> @Patient.Contact</p>
+            <p><strong>Address:</strong> @Patient.Address</p>
+        </div>
+    </div>
+</div>
+
+
+<div class="card p-4 mb-4">
+    <h4>Appoitment Details</h4>
+    @foreach (var Appointment in Appoitments)
+    {
+        <hr />
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Appointment ID:</strong> @Appointment.Id</p>
+                <p><strong>Doctor ID:</strong> @Appointment.DoctorId</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Appointment Date:</strong> @Appointment.AppointmentDate</p>
+                <p><strong>Note:</strong> @Appointment.Notes</p>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="card p-4 mb-4">
+    <h4>Medicine Details</h4>
+    @foreach (var DispencedMedicine in DispencedMedicines)
+    {
+        <hr />
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Medicine ID:</strong> @DispencedMedicine.Id</p>
+                <p><strong>Quantity:</strong> @DispencedMedicine.Quantity</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Cost:</strong> @DispencedMedicine.Cost</p>
+                <p><strong>Total Price:</strong> @DispencedMedicine.TotalPrice</p>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="card p-4 mb-4">
+    <h4>Test Details</h4>
+    @foreach (var Test in TestsResults)
+    {
+        <hr />
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Test ID:</strong> @Test.Id</p>
+                <p><strong>Test Name:</strong> @Test.TestName</p>
+                <p><strong>Test Result:</strong> @Test.Result</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Test Cost:</strong> @Test.Cost</p>
+                <p><strong>Performed Date:</strong> @Test.PerformedDate</p>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="card p-4 mb-4">
+    <h4>Bill Details</h4>
+    @foreach (var Bill in Bills)
+    {
+        <hr />
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Bill ID:</strong> @Bill.Id</p>
+                <p><strong>Doctor Fee:</strong> @Bill.DoctorFee</p>
+                <p><strong>Medicine Cost:</strong> @Bill.MedicineCost</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Test Cost:</strong> @Bill.TestCost</p>
+                <p><strong>Total Amount:</strong> @Bill.TotalAmount</p>
+                <p><strong>Date:</strong> @Bill.Date</p>
+            </div>
+        </div>
+    }
+</div>

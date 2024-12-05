@@ -29,11 +29,22 @@ namespace HMS.Controllers
             if (user == null) return NotFound();
             ViewBag.user = user;
 
-            var AllPateint = _context.Patients.ToList();
+            var AllPateint = _context.Patients.Where(x => x.ClearedBills == false).ToList();
             return View(AllPateint);
         }
 
-         
+        public IActionResult CheckedPatients()
+        {
+            int userId = GetLoggedInUserId();
+            var user = _context.Users.Find(userId);
+            if (user == null) return NotFound();
+            ViewBag.user = user;
+
+            var AllPateint = _context.Patients.Where(x => x.ClearedBills == true).ToList();
+            return View(AllPateint);
+        }
+
+
         public IActionResult AddNew(int? id)
         {
             if (id != null)
@@ -74,9 +85,21 @@ namespace HMS.Controllers
             return RedirectToAction("Index");
         }
 
-         
-        public IActionResult CheckOut(int ID)
+        public IActionResult Details(int Id)
         {
+            var Patient = _context.Patients.Find(Id);
+            var Appoitments = _context.Appointments.Where(x => x.PatientId == Patient.Id).ToList();
+            var DispencedMedicines = _context.DispensedMedicines.Where(x => x.PatientId == Patient.Id).ToList();
+            var TestsResults = _context.LabResults.Where(x => x.PatientId == Patient.Id).ToList();
+            var Bills = _context.Bills.Where(x => x.PatientId == Patient.Id).ToList();
+
+
+            ViewBag.Patient = Patient;
+            ViewBag.Appoitments = Appoitments;
+            ViewBag.DispencedMedicines = DispencedMedicines;
+            ViewBag.TestsResults = TestsResults;
+            ViewBag.Bills = Bills;
+
             return View();
         }
     }

@@ -55,7 +55,7 @@ namespace HMS.Controllers
 
 
         [HttpPost]
-        public IActionResult PerformTest(int patientId, int DoctorSuggestionId, string testName, string Result)
+        public IActionResult PerformTest(int patientId, string testName, string Result, int Cost)
         {
             if (ModelState.IsValid)
             {
@@ -63,19 +63,12 @@ namespace HMS.Controllers
                 {
                     PatientId = patientId,
                     TestName = testName,
-                    DoctorSuggestionId = DoctorSuggestionId,
                     Result = Result,
-                    PerformedDate = DateTime.Now
-
+                    PerformedDate = DateTime.Now,
+                    Cost = Cost
                 };
                 _context.LabResults.Add(result);
 
-                // Mark suggestion as completed
-                var suggestion = _context.SuggestedTests.FirstOrDefault(s => s.Id == DoctorSuggestionId);
-                if (suggestion != null)
-                {
-                    suggestion.IsCompleted = true;
-                }
 
                 _context.SaveChanges();
                 return RedirectToAction("Index");

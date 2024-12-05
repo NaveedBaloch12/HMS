@@ -1,5 +1,6 @@
 ﻿using HMS.Data;
 using HMS.Entites;
+using HMS.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,7 @@ namespace HMS.Controllers
         public IActionResult Index()
         {
             var appointments = _context.Appointments
+                .Where(x => x.Patient.ClearedBills == false)
                 .Include(a => a.Patient)
                 .Include(a => a.Doctor)
                 .ToList();
@@ -71,6 +73,7 @@ namespace HMS.Controllers
 
             return RedirectToAction(actionName: "Index", controllerName: "Appointment");
         }
+
     }
 
 }

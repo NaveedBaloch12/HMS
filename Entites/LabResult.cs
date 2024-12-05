@@ -7,6 +7,7 @@
         public int DoctorSuggestionId { get; set; }
         public string? TestName { get; set; }
         public string? Result { get; set; }
+        public decimal Cost { get; set; }
         public DateTime PerformedDate { get; set; }
 
         public Patient? Patient { get; set; }

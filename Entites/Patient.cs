@@ -11,6 +11,7 @@ namespace HMS.Entites
         public string? Gender { get; set; }
         public DateOnly DateOfBirth { get; set; }
         public string? Contact { get; set; }
+        public bool ClearedBills { get; set; } = false;
         public string? Address { get; set; }
         public string? MedicalIssue { get; set; }
         public string? MedicalHistory { get; set; }

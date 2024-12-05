@@ -57,6 +57,11 @@ namespace HMS.Controllers
 
             appointment.Status = "Checked";
 
+            foreach(var medd in model.Examination.Medicines)
+            {
+                medd.PatientId = appointment.PatientId;
+            }
+            
             // Process the examination
             var examination = new Examination
             {

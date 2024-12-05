@@ -8,7 +8,6 @@
     <form asp-action="PerformTest" asp-controller="LabTechnician" method="post">
         <h4>Test Suggestion</h4>
         <input type="hidden" name="patientId" value="@Model.PatientId" />
-        <input type="hidden" name="DoctorSuggestionId" value="@Model.DoctorSuggestionId" />
 
 
         <div class="">
@@ -16,9 +15,15 @@
                 <label class="form-label">Test Name:</label>
                 <input type="text" id="testName" name="testName" class="form-control" value="@Model.TestName" />
             </div>
+
             <div class="">
                 <label class="form-label">Result</label>
                 <input name="Result" id="Result" class="form-control" />
+            </div>
+
+            <div class="">
+                <label class="form-label">Cost</label>
+                <input type="number" name="Cost" id="Result" class="form-control" />
             </div>
             <div class="">
                 <button type="submit" class="btn btn-primary ">Suggest Test</button>

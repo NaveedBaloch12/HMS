@@ -20,8 +20,7 @@ namespace HMS.Data
             // PharmacyInventory Configuration
             modelBuilder.Entity<PharmacyInventory>()
                 .HasMany(pi => pi.DispensedMedicines)
-                .WithOne(dm => dm.PharmacyInventory)
-                .HasForeignKey(dm => dm.MedicineId);
+                .WithOne(dm => dm.PharmacyInventory);
 
             // DispensedMedicine Configuration
             modelBuilder.Entity<DispensedMedicine>()
@@ -47,5 +46,7 @@ namespace HMS.Data
         public DbSet<DispensedMedicine> DispensedMedicines { get; set; }
         public DbSet<LabResult> LabResults { get; set; }
         public DbSet<SuggestedTest> SuggestedTests { get; set; }
+        public DbSet<Bill> Bills { get; set; }
+
     }
 }

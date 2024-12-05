@@ -1,0 +1,14 @@
+﻿@model HMS.Entites.Bill
+@{
+    ViewData["Title"] = "Bill Details";
+}
+
+<div class="container mt-4">
+    <h1>Bill Details</h1>
+    <p><strong>Patient Name:</strong> @Model.Patient.Name</p>
+    <p><strong>Doctor Fee:</strong> @Model.DoctorFee</p>
+    <p><strong>Medicine Cost:</strong> @Model.MedicineCost</p>
+    <p><strong>Test Cost:</strong> @Model.TestCost</p>
+    <p><strong>Total Amount:</strong> @Model.TotalAmount</p>
+    <p><strong>Date:</strong> @Model.Date.ToString("dd-MM-yyyy")</p>
+</div>
